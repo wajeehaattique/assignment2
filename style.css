@@ -1,5 +1,5 @@
 /* =====================================
-   1. COLOR PALETTE & GLOBAL SETTINGS
+   COLOURS AND GLOBAL SETTINGS
 ===================================== */
 
 :root {
@@ -11,7 +11,7 @@
   --cyan: #35D6FF;
 
   --muted: #77736D;
-  --line: rgba(41, 41, 41, .14);
+  --line: rgba(41,41,41,.14);
 
   --display: "Space Grotesk", sans-serif;
   --body: "DM Sans", sans-serif;
@@ -43,7 +43,7 @@ body::before {
 
   background-image:
     radial-gradient(
-      rgba(41, 41, 41, .12) .65px,
+      rgba(41,41,41,.12) .65px,
       transparent .65px
     );
 
@@ -69,13 +69,13 @@ textarea {
 
 .section-pad {
   padding:
-    clamp(4rem, 8vw, 8rem)
-    clamp(1.2rem, 7vw, 7.5rem);
+    clamp(4rem,8vw,8rem)
+    clamp(1.2rem,7vw,7.5rem);
 }
 
 
 /* =====================================
-   2. SHARED TEXT STYLES
+   COMMON TEXT
 ===================================== */
 
 .topline,
@@ -88,7 +88,6 @@ footer,
 .contact-link span,
 .contact-form label,
 .form-note,
-.phone-intro-note,
 .morph-label,
 .morph-caption span {
   font-family: var(--mono);
@@ -116,14 +115,6 @@ footer,
   height: 7px;
   background: var(--orange);
   border-radius: 50%;
-  display: inline-block;
-}
-
-h1,
-h2,
-h3,
-p {
-  margin-top: 0;
 }
 
 h1,
@@ -134,20 +125,20 @@ h2 {
 }
 
 h1 {
-  font-size: clamp(4.2rem, 10vw, 9.5rem);
+  font-size: clamp(4.2rem,10vw,9.5rem);
   line-height: .83;
   margin: .9rem 0 1.5rem;
 }
 
 h2 {
-  font-size: clamp(3rem, 7vw, 6.8rem);
+  font-size: clamp(3rem,7vw,6.8rem);
   line-height: .91;
   margin: 0;
 }
 
 h2 em {
-  font-style: normal;
   color: var(--orange);
+  font-style: normal;
 }
 
 .orange-dot {
@@ -156,7 +147,7 @@ h2 em {
 
 
 /* =====================================
-   3. INTRODUCTION
+   INTRODUCTION
 ===================================== */
 
 .intro {
@@ -169,7 +160,7 @@ h2 em {
 }
 
 .intro-grid {
-  width: min(1120px, 100%);
+  width: min(1120px,100%);
   margin: 5vh auto 2rem;
 
   display: grid;
@@ -180,7 +171,7 @@ h2 em {
 }
 
 .intro-text {
-  font-size: clamp(1rem, 1.35vw, 1.2rem);
+  font-size: clamp(1rem,1.35vw,1.2rem);
   line-height: 1.75;
   max-width: 590px;
   color: #5c5852;
@@ -201,13 +192,13 @@ h2 em {
 }
 
 
-/* Avatar */
+/* AVATAR */
 
 .avatar-wrap {
   position: relative;
   justify-self: center;
 
-  width: min(100%, 350px);
+  width: min(100%,350px);
   aspect-ratio: 1 / 1.12;
 
   display: grid;
@@ -218,36 +209,28 @@ h2 em {
   width: 85%;
   position: relative;
   z-index: 1;
-
-  filter:
-    drop-shadow(0 20px 25px rgba(41, 41, 41, .12));
+  filter: drop-shadow(0 20px 25px rgba(41,41,41,.12));
 }
 
 .avatar-orbit {
   position: absolute;
   width: 90%;
   aspect-ratio: 1;
-
-  border: 1px solid rgba(240, 120, 66, .5);
+  border: 1px solid rgba(240,120,66,.5);
   border-radius: 50%;
-
   transform: rotate(-18deg);
 }
 
 .avatar-orbit::after {
   content: "";
   position: absolute;
-
   width: 10px;
   height: 10px;
-
   border-radius: 50%;
   background: var(--cyan);
-
   top: 12%;
   right: 15%;
-
-  box-shadow: 0 0 0 7px rgba(53, 214, 255, .12);
+  box-shadow: 0 0 0 7px rgba(53,214,255,.12);
 }
 
 .avatar-caption {
@@ -277,7 +260,7 @@ h2 em {
 
 
 /* =====================================
-   4. PROJECT INTRO HEADINGS
+   SECTION HEADINGS
 ===================================== */
 
 .project-intro,
@@ -291,7 +274,6 @@ h2 em {
   align-items: end;
   justify-content: space-between;
   gap: 2rem;
-
   margin: 4rem 0 3rem;
 }
 
@@ -303,28 +285,15 @@ h2 em {
   margin: 0;
 }
 
-.phone-intro-note {
-  color: var(--muted);
-  margin: 0;
-}
-
 
 /* =====================================
-   5. SCROLL-LINKED MORPH STAGES
+   DESKTOP SCROLL MORPH
 ===================================== */
 
-/*
-  Each morph section is taller than the viewport.
-  Its inner stage remains sticky while the user scrolls.
-
-  JavaScript updates the device dimensions based
-  on the section's scroll progress.
-*/
-
-.morph-section {
+.morph-section,
+.phone-morph-section {
+  height: 220svh;
   position: relative;
-  height: 210svh;
-  isolation: isolate;
 }
 
 .morph-sticky {
@@ -345,159 +314,16 @@ h2 em {
 .morph-label {
   position: absolute;
   top: 25px;
-  left: clamp(1rem, 4vw, 4rem);
-  right: clamp(1rem, 4vw, 4rem);
+  left: clamp(1rem,4vw,4rem);
+  right: clamp(1rem,4vw,4rem);
 
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
 
   color: var(--muted);
-  pointer-events: none;
   z-index: 5;
-}
-
-.morph-visual {
-  --morph-progress: 0;
-  --rotation-progress: 0;
-
-  position: relative;
-
-  width: var(--morph-width, 80vw);
-  height: var(--morph-height, 45vw);
-
-  flex: none;
-  max-width: none;
-  max-height: none;
-
-  overflow: visible;
-
-  background: #292929;
-  border: var(--morph-border, 9px) solid #292929;
-  border-radius: var(--morph-radius, 16px);
-
-  box-shadow:
-    0 25px 55px rgba(16, 30, 53, .16);
-
-  will-change: width, height, border-radius;
-}
-
-
-/* Image window */
-
-.morph-image {
-  position: absolute;
-
-  inset:
-    var(--image-inset-top, 25px)
-    var(--image-inset-side, 8px)
-    var(--image-inset-bottom, 8px);
-
-  overflow: hidden;
-  background: var(--beige);
-}
-
-.morph-image img {
-  display: block;
-  width: 100%;
-  height: 100%;
-
-  object-fit: cover;
-  object-position: center;
-}
-
-
-/* Desktop screenshot crop */
-
-.desktop-morph .morph-image img {
-  object-position: 50% 59%;
-}
-
-
-/* Desktop monitor details */
-
-.morph-device-top {
-  position: absolute;
-  z-index: 3;
-
-  top: 0;
-  left: 0;
-  right: 0;
-
-  height: 25px;
-  padding: 0 10px;
-
-  display: flex;
-  align-items: center;
-  gap: 5px;
-
-  opacity: var(--device-opacity, 1);
   pointer-events: none;
 }
-
-.morph-device-top span {
-  width: 6px;
-  height: 6px;
-
-  border-radius: 50%;
-  background: var(--orange);
-}
-
-.morph-device-top span:nth-child(2) {
-  background: var(--cyan);
-}
-
-.morph-device-top span:nth-child(3) {
-  background: #b8b1a7;
-}
-
-.morph-device-top small {
-  margin-left: auto;
-  color: #ccc;
-
-  font: 8px var(--mono);
-  letter-spacing: .1em;
-}
-
-.morph-monitor-neck {
-  position: absolute;
-
-  width: 12%;
-  height: 28px;
-
-  left: 44%;
-  top: 100%;
-
-  background:
-    linear-gradient(
-      90deg,
-      #aaa39a,
-      #e4ded4,
-      #aaa39a
-    );
-
-  opacity: var(--device-opacity, 1);
-  pointer-events: none;
-}
-
-.morph-monitor-foot {
-  position: absolute;
-
-  width: 25%;
-  height: 12px;
-
-  left: 37.5%;
-  top: calc(100% + 27px);
-
-  border-radius: 50%;
-  background: #bdb6ac;
-
-  opacity: var(--device-opacity, 1);
-  pointer-events: none;
-}
-
-
-/* Caption */
 
 .morph-caption {
   position: absolute;
@@ -509,8 +335,6 @@ h2 em {
   gap: 5px;
 
   text-align: center;
-
-  opacity: var(--caption-opacity, 1);
   pointer-events: none;
 }
 
@@ -520,61 +344,166 @@ h2 em {
 
 .morph-caption strong {
   font: 600 1rem var(--display);
+  transition: opacity .1s linear;
+}
+
+
+/* DESKTOP DEVICE */
+
+.desktop-device {
+  position: relative;
+
+  width: min(82vw,1050px);
+  aspect-ratio: 16 / 9;
+
+  background: #292929;
+  border: 9px solid #292929;
+  border-radius: 16px;
+
+  box-shadow: 0 25px 55px rgba(16,30,53,.16);
+
+  transform-origin: center center;
+  will-change: width,height,border-radius;
+}
+
+.desktop-top {
+  height: 25px;
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  padding: 0 10px;
+
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.desktop-top span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--orange);
+}
+
+.desktop-top span:nth-child(2) {
+  background: var(--cyan);
+}
+
+.desktop-top span:nth-child(3) {
+  background: #b8b1a7;
+}
+
+.desktop-top small {
+  margin-left: auto;
+  color: #ccc;
+  font: 8px var(--mono);
+}
+
+.desktop-screen {
+  position: absolute;
+  inset: 25px 8px 8px;
+  overflow: hidden;
+  background: var(--beige);
+}
+
+.desktop-screen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 59%;
+}
+
+.monitor-neck {
+  position: absolute;
+  width: 12%;
+  height: 28px;
+  left: 44%;
+  top: 100%;
+  background: linear-gradient(90deg,#aaa39a,#e4ded4,#aaa39a);
+}
+
+.monitor-foot {
+  position: absolute;
+  width: 25%;
+  height: 12px;
+  left: 37.5%;
+  top: calc(100% + 27px);
+  border-radius: 50%;
+  background: #bdb6ac;
 }
 
 
 /* =====================================
-   6. PHONE MORPH
+   PHONE PHYSICAL ROTATION
 ===================================== */
 
-.phone-morph {
-  width: var(--morph-width, 230px);
-  height: var(--morph-height, 460px);
-
-  border: var(--morph-border, 9px) solid #292929;
-  border-radius: var(--morph-radius, 37px);
-
-  background: #292929;
-  padding: 0;
-
-  overflow: visible;
-
-  box-shadow:
-    0 28px 55px rgba(16, 30, 53, .2);
-}
-
-.phone-morph .morph-image {
-  inset: 7px;
-  border-radius: 25px;
-}
-
-.phone-morph .morph-image img {
-  position: absolute;
-  inset: 0;
-
-  object-fit: cover;
-  object-position: center;
+.phone-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
 }
 
 /*
-  The two separate mobile screenshots crossfade
-  while the phone changes from portrait to landscape.
+  The phone is a portrait device.
+  JavaScript rotates it by 90 degrees.
 */
 
-.phone-portrait {
-  opacity: calc(1 - var(--rotation-progress, 0));
+.phone-device {
+  position: relative;
+
+  width: 210px;
+  height: 420px;
+
+  flex: none;
+
+  background: #292929;
+  border: 9px solid #292929;
+  border-radius: 37px;
+
+  overflow: hidden;
+
+  box-shadow: 0 28px 55px rgba(16,30,53,.2);
+
+  transform-origin: center center;
+  transform: rotate(0deg) scale(1);
+
+  will-change: transform;
+}
+
+.phone-screen {
+  position: absolute;
+  inset: 7px;
+
+  overflow: hidden;
+  border-radius: 25px;
+  background: var(--beige);
+}
+
+.phone-screen img {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+
+  transition: opacity .7s ease;
 }
 
 .phone-landscape {
-  opacity: var(--rotation-progress, 0);
+  opacity: 0;
 }
-
-
-/* Phone camera */
 
 .phone-camera {
   position: absolute;
-  z-index: 4;
+  z-index: 3;
 
   top: 9px;
   left: 50%;
@@ -586,18 +515,11 @@ h2 em {
 
   background: #292929;
   border-radius: 20px;
-
-  opacity: var(--device-opacity, 1);
-  pointer-events: none;
 }
 
-
-/* Phone side button */
-
-.phone-side-button {
+.phone-button {
   position: absolute;
-
-  right: -10px;
+  right: -9px;
   top: 100px;
 
   width: 3px;
@@ -605,14 +527,11 @@ h2 em {
 
   border-radius: 0 4px 4px 0;
   background: #555;
-
-  opacity: var(--device-opacity, 1);
-  pointer-events: none;
 }
 
 
 /* =====================================
-   7. CINEMATIC SLIDESHOW
+   ANOTHER PROJECT SLIDESHOW
 ===================================== */
 
 .another-section {
@@ -624,19 +543,14 @@ h2 em {
   align-items: end;
   justify-content: space-between;
   gap: 2rem;
-
   margin: 3.5rem 0 2.5rem;
 }
 
 .cinema-wrap {
-  width: min(100%, 1200px);
+  width: min(100%,1200px);
   margin: auto;
-
-  position: relative;
   transition: transform .35s ease;
 }
-
-/* Small hover bulge; not clickable */
 
 .cinema-wrap:hover {
   transform: scale(1.018);
@@ -644,20 +558,18 @@ h2 em {
 
 .cinema-screen {
   position: relative;
-
+  width: 100%;
   aspect-ratio: 2.18 / 1;
 
   overflow: hidden;
   background: var(--beige);
 
-  box-shadow:
-    0 24px 45px rgba(41, 41, 41, .12);
+  box-shadow: 0 24px 45px rgba(41,41,41,.12);
 }
 
 .cinema-slide {
   position: absolute;
   inset: 0;
-
   opacity: 0;
   transition: opacity 1s ease;
 }
@@ -669,16 +581,12 @@ h2 em {
 .cinema-slide img {
   width: 100%;
   height: 100%;
-
   object-fit: cover;
-  object-position: 50% 56%;
+  object-position: center;
 }
 
 
-/*
-  These two shapes create the curved cinema cuts.
-  They sit over the image without resizing the PNG.
-*/
+/* Curved cinematic cuts */
 
 .cinema-cut {
   position: absolute;
@@ -687,8 +595,8 @@ h2 em {
   left: 50%;
   transform: translateX(-50%);
 
-  width: min(42%, 390px);
-  height: clamp(28px, 5vw, 68px);
+  width: min(42%,390px);
+  height: clamp(28px,5vw,68px);
 
   background: var(--ivory);
   pointer-events: none;
@@ -711,47 +619,44 @@ h2 em {
   color: var(--muted);
 
   margin: 1rem auto 0;
-  width: min(100%, 1200px);
+  width: min(100%,1200px);
 }
 
 
 /* =====================================
-   8. CONTACT SECTION
+   CONTACT
 ===================================== */
 
 .contact-section {
   padding-top: 7rem;
   padding-bottom: 2rem;
 
-  background:
-    linear-gradient(
-      180deg,
-      transparent,
-      rgba(233, 226, 215, .55)
-    );
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(233,226,215,.55)
+  );
 }
 
 .contact-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
 
-  gap: clamp(2rem, 7vw, 7rem);
+  gap: clamp(2rem,7vw,7rem);
 
   margin: 4rem auto 6rem;
-  width: min(1100px, 100%);
+  width: min(1100px,100%);
 }
 
 .contact-copy h2 {
-  font-size: clamp(4rem, 8vw, 7rem);
+  font-size: clamp(4rem,8vw,7rem);
   margin: 1.3rem 0;
 }
 
 .contact-copy > p:not(.eyebrow) {
   max-width: 390px;
-
   color: var(--muted);
   line-height: 1.75;
-
   margin-bottom: 2rem;
 }
 
@@ -780,17 +685,16 @@ h2 em {
 }
 
 
-/* Contact form */
+/* FORM */
 
 .contact-form {
-  background: rgba(255, 255, 255, .56);
-
-  border: 1px solid rgba(41, 41, 41, .08);
+  background: rgba(255,255,255,.56);
+  border: 1px solid rgba(41,41,41,.08);
   border-radius: 16px;
 
-  padding: clamp(1.2rem, 3vw, 2.2rem);
+  padding: clamp(1.2rem,3vw,2.2rem);
 
-  box-shadow: 0 18px 45px rgba(41, 41, 41, .05);
+  box-shadow: 0 18px 45px rgba(41,41,41,.05);
 }
 
 .contact-form label {
@@ -802,8 +706,8 @@ h2 em {
 .contact-form input,
 .contact-form textarea {
   display: block;
-
   width: 100%;
+
   margin-top: .55rem;
 
   border: 1px solid var(--line);
@@ -822,14 +726,11 @@ h2 em {
 .contact-form input:focus,
 .contact-form textarea:focus {
   border-color: var(--orange);
-
-  box-shadow:
-    0 0 0 3px rgba(240, 120, 66, .1);
+  box-shadow: 0 0 0 3px rgba(240,120,66,.1);
 }
 
 .contact-form button {
   width: 100%;
-
   border: 0;
   border-radius: 8px;
 
@@ -846,9 +747,7 @@ h2 em {
   display: flex;
   justify-content: space-between;
 
-  transition:
-    background .2s ease,
-    transform .2s ease;
+  transition: background .2s ease,transform .2s ease;
 }
 
 .contact-form button:hover {
@@ -879,26 +778,7 @@ footer b {
 
 
 /* =====================================
-   9. SCROLL REVEAL
-===================================== */
-
-.reveal {
-  opacity: 0;
-  transform: translateY(28px);
-
-  transition:
-    opacity .8s ease,
-    transform .8s cubic-bezier(.2, .8, .2, 1);
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-
-/* =====================================
-   10. TABLET AND MOBILE
+   MOBILE RESPONSIVENESS
 ===================================== */
 
 @media (max-width: 760px) {
@@ -908,8 +788,6 @@ footer b {
     font-size: .55rem;
   }
 
-  /* Intro */
-
   .intro {
     min-height: auto;
     padding-top: 1.5rem;
@@ -918,35 +796,21 @@ footer b {
   .intro-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
-
     margin: 4rem auto 1rem;
   }
 
-  .intro-copy {
-    order: 1;
-  }
-
   .avatar-wrap {
-    order: 2;
-
-    width: min(70%, 250px);
+    width: min(70%,250px);
     margin: 1rem auto 0;
   }
 
   h1 {
-    font-size: clamp(4.5rem, 18vw, 7rem);
+    font-size: clamp(4.5rem,18vw,7rem);
   }
 
   .intro-text {
     font-size: 1rem;
   }
-
-  .scroll-note {
-    margin-top: 2.5rem;
-  }
-
-
-  /* Project headings */
 
   .section-heading {
     display: block;
@@ -955,17 +819,6 @@ footer b {
 
   .section-heading p {
     margin-top: 1.2rem;
-  }
-
-
-  /* Morph stages */
-
-  .morph-section {
-    height: 190svh;
-  }
-
-  .morph-sticky {
-    min-height: 420px;
   }
 
   .morph-label {
@@ -981,17 +834,10 @@ footer b {
     font-size: .85rem;
   }
 
-  .morph-device-top small {
-    font-size: 6px;
-  }
-
-  .morph-monitor-neck,
-  .morph-monitor-foot {
+  .monitor-neck,
+  .monitor-foot {
     display: none;
   }
-
-
-  /* Cinema */
 
   .another-heading {
     display: block;
@@ -1006,27 +852,19 @@ footer b {
     aspect-ratio: 1.55 / 1;
   }
 
-  .cinema-slide img {
-    object-position: 50% 55%;
-  }
-
   .cinema-cut {
     width: 48%;
     height: 34px;
   }
 
-
-  /* Contact */
-
   .contact-grid {
     grid-template-columns: 1fr;
     gap: 2rem;
-
     margin: 3rem auto 4rem;
   }
 
   .contact-copy h2 {
-    font-size: clamp(4.5rem, 18vw, 6rem);
+    font-size: clamp(4.5rem,18vw,6rem);
   }
 
   footer {
@@ -1038,19 +876,13 @@ footer b {
 
 
 /* =====================================
-   11. REDUCED MOTION ACCESSIBILITY
+   REDUCED MOTION
 ===================================== */
 
 @media (prefers-reduced-motion: reduce) {
 
   html {
     scroll-behavior: auto;
-  }
-
-  .reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
   }
 
   .cinema-wrap {
