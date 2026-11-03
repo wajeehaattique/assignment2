@@ -458,7 +458,6 @@ h2 em {
 
   width: 210px;
   height: 420px;
-
   flex: none;
 
   background: #292929;
@@ -470,7 +469,7 @@ h2 em {
   box-shadow: 0 28px 55px rgba(16,30,53,.2);
 
   transform-origin: center center;
-  transform: rotate(0deg) scale(1);
+  transform: translateY(0) rotate(0deg) scale(1);
 
   will-change: transform;
 }
