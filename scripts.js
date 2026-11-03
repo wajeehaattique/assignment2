@@ -100,274 +100,34 @@ function updateDesktop() {
 }
 
 
-/* =====================================
-   PHONE FALLING ANIMATION
-===================================== */
+/* PHONE FALLING ANIMATION */
 
-const phoneSection =
-  document.getElementById("phoneMorph");
+const phoneSection = document.getElementById("phoneMorph");
+const phoneRotation = document.getElementById("phoneRotation");
 
-const phoneDevice =
-  document.getElementById("phoneDevice");
+let phoneHasFallen = false;
 
-const portraitImage =
-  document.querySelector(".phone-portrait");
+const phoneObserver = new IntersectionObserver((entries) => {
 
-const landscapeImage =
-  document.querySelector(".phone-landscape");
+  entries.forEach((entry) => {
 
-const phoneCamera =
-  document.querySelector(".phone-camera");
+    if (entry.isIntersecting && !phoneHasFallen) {
 
-const phoneButton =
-  document.querySelector(".phone-button");
+      phoneHasFallen = true;
 
-let phoneRotationStarted = false;
-let phoneRotationStart = null;
+      setTimeout(() => {
+        phoneRotation.classList.add("fall-landscape");
+      }, 3000);
 
-const rotationDelay = 3000;
-const rotationDuration = 1800;
-
-
-/* =====================================
-   START WHEN PHONE ENTERS VIEW
-===================================== */
-
-const phoneObserver = new IntersectionObserver(
-  (entries) => {
-
-    entries.forEach((entry) => {
-
-      if (
-        entry.isIntersecting &&
-        !phoneRotationStarted
-      ) {
-
-        phoneRotationStarted = true;
-
-        setTimeout(() => {
-
-          phoneRotationStart = performance.now();
-
-          requestAnimationFrame(animatePhone);
-
-        }, rotationDelay);
-
-      }
-
-    });
-
-  },
-  {
-    threshold: 0.1
-  }
-);
-
-phoneObserver.observe(phoneDevice);
-
-
-/* =====================================
-   ANIMATION HELPERS
-===================================== */
-
-function phoneClamp(value, min, max) {
-  return Math.min(Math.max(value, min), max);
-}
-
-function phoneEase(value) {
-  return value * value * (3 - 2 * value);
-}
-
-
-/* =====================================
-   PHONE SCROLL PROGRESS
-===================================== */
-
-function getPhoneScrollProgress() {
-
-  const rect = phoneSection.getBoundingClientRect();
-
-  const distance =
-    phoneSection.offsetHeight - window.innerHeight;
-
-  if (distance <= 0) return 0;
-
-  return phoneClamp(
-    -rect.top / distance,
-    0,
-    1
-  );
-
-}
-
-
-/* =====================================
-   PHONE ROTATION PROGRESS
-===================================== */
-
-function getPhoneRotationProgress(now) {
-
-  if (phoneRotationStart === null) {
-    return 0;
-  }
-
-  return phoneClamp(
-    (now - phoneRotationStart) / rotationDuration,
-    0,
-    1
-  );
-
-}
-
-
-/* =====================================
-   THE ACTUAL FALL
-===================================== */
-
-function animatePhone(now) {
-
-  const rawProgress =
-    getPhoneRotationProgress(now);
-
-  const progress =
-    phoneEase(rawProgress);
-
-  const scrollProgress =
-    phoneEase(getPhoneScrollProgress());
-
-  /*
-    Rotate from portrait to landscape.
-    The extra 5 degrees create a small overshoot.
-  */
-
-  let angle = progress * 90;
-
-  if (rawProgress >= 1) {
-    angle = 90;
-  } else {
-    angle += Math.sin(progress * Math.PI) * 5;
-  }
-
-  /*
-    Move the phone slightly down while it falls.
-  */
-
-  const fallingDistance =
-    progress * 22;
-
-  /*
-    Change from portrait screenshot
-    to the real landscape screenshot.
-  */
-
-  portraitImage.style.opacity =
-    1 - progress;
-
-  landscapeImage.style.opacity =
-    progress;
-
-  /*
-    The phone's landscape bounding width.
-  */
-
-  const landscapeWidth = Math.min(
-    window.innerWidth * 0.76,
-    760
-  );
-
-  const landscapeHeight =
-    landscapeWidth * 720 / 1600;
-
-  /*
-    Scale the physical phone to fit
-    the landscape screenshot.
-  */
-
-  const landscapeScale =
-    landscapeWidth / 420;
-
-  const rotationScale =
-    1 + (landscapeScale - 1) * progress;
-
-  /*
-    Expand the horizontal phone on scroll.
-  */
-
-  const expansionScale = 1 + (
-    Math.max(
-      window.innerWidth / landscapeWidth,
-      window.innerHeight / landscapeHeight
-    ) - 1
-  ) * scrollProgress;
-
-  const finalScale =
-    rotationScale * expansionScale;
-
-  /*
-    Hide frame details during expansion.
-  */
-
-  const detailsOpacity =
-    1 - scrollProgress;
-
-  phoneCamera.style.opacity = detailsOpacity;
-  phoneButton.style.opacity = detailsOpacity;
-
-  phoneDevice.style.borderRadius =
-    `${37 * (1 - scrollProgress)}px`;
-
-  phoneDevice.style.borderWidth =
-    `${9 * (1 - scrollProgress)}px`;
-
-  /*
-    FINAL TRANSFORM:
-    translateY = falling movement
-    rotate = physical phone turn
-    scale = landscape sizing + expansion
-  */
-
-  phoneDevice.style.transform =
-    `translateY(${fallingDistance}px)
-     rotate(${angle}deg)
-     scale(${finalScale})`;
-
-  /*
-    Continue frames while falling.
-  */
-
-  if (rawProgress < 1) {
-    requestAnimationFrame(animatePhone);
-  }
-
-}
-
-
-/* =====================================
-   UPDATE EXPANSION WHEN SCROLLING
-===================================== */
-
-window.addEventListener(
-  "scroll",
-  () => {
-
-    if (phoneRotationStart !== null) {
-      animatePhone(performance.now());
     }
 
-  },
-  { passive: true }
-);
+  });
 
-window.addEventListener(
-  "resize",
-  () => {
+}, {
+  threshold: 0.15
+});
 
-    if (phoneRotationStart !== null) {
-      animatePhone(performance.now());
-    }
-
-  }
-);
+phoneObserver.observe(phoneSection);
 
 
 /* =====================================

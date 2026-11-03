@@ -889,3 +889,50 @@ footer b {
   }
 
 }
+
+/* PHONE FALLING ANIMATION */
+
+.phone-rotation-wrapper {
+  width: 210px;
+  height: 420px;
+
+  display: grid;
+  place-items: center;
+
+  transform-origin: center center;
+  transform: rotate(0deg);
+
+  will-change: transform;
+}
+
+.phone-rotation-wrapper.fall-landscape {
+  animation: phoneFall 1.8s cubic-bezier(.65, 0, .35, 1) forwards;
+}
+
+@keyframes phoneFall {
+
+  0% {
+    transform: rotate(0deg);
+  }
+
+  65% {
+    transform: rotate(98deg);
+  }
+
+  82% {
+    transform: rotate(86deg);
+  }
+
+  100% {
+    transform: rotate(90deg);
+  }
+
+}
+
+.phone-rotation-wrapper.fall-landscape .phone-portrait {
+  opacity: 0;
+}
+
+.phone-rotation-wrapper.fall-landscape .phone-landscape {
+  opacity: 1;
+}
