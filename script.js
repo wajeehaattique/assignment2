@@ -93,6 +93,11 @@ const cleanImage = desktopScreen.querySelector(".desktop-clean-image");
 
 fullImage.style.opacity = 1 - progress;
 cleanImage.style.opacity = progress;
+
+const scrollHint = document.querySelector("#desktopMorph .scroll-hint");
+if (scrollHint) {
+  scrollHint.style.opacity = 1 - progress;
+}
 }
 
 

@@ -315,18 +315,30 @@ h2 em {
   background: var(--ivory);
 }
 
-.morph-label {
+#desktopMorph .morph-label {
   position: absolute;
-  top: 25px;
-  left: clamp(1rem,4vw,4rem);
-  right: clamp(1rem,4vw,4rem);
+  top: 17px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  padding: 0 21px;
+  box-sizing: border-box;
 
   display: flex;
   justify-content: space-between;
 
   color: var(--muted);
+  font-size: 10px;
   z-index: 5;
   pointer-events: none;
+}
+
+#desktopMorph .scroll-hint {
+  transition: opacity 0.2s ease;
+}
+
+#desktopMorph .morph-caption {
+  transform: translateY(+23px);
 }
 
 .morph-caption {
@@ -796,11 +808,6 @@ footer b {
 
   .section-heading p {
     margin-top: 1.2rem;
-  }
-
-  .morph-label {
-    top: 17px;
-    font-size: 8px;
   }
 
   .morph-caption {
