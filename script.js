@@ -1,78 +1,148 @@
 /* =====================================
-   DESKTOP SCROLL EXPANSION
+   DESKTOP SCROLL MORPH
 ===================================== */
 
 const desktopSection = document.getElementById("desktopMorph");
 const desktopDevice = document.getElementById("desktopDevice");
+const morphSticky = document.querySelector(".morph-sticky");
+
+const desktopScreen = desktopDevice?.querySelector(".desktop-screen");
+
+const desktopDetails = desktopDevice?.querySelectorAll(
+  ".desktop-top, .monitor-neck, .monitor-foot"
+);
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
 
 function smooth(value) {
-  return value * value * (3 - 2 * value);
+  return value * value * value *
+    (value * (value * 6 - 15) + 10);
 }
 
+/* DESKTOP ENTRANCE */
+
+const desktopObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      morphSticky.classList.add("is-visible");
+      desktopObserver.unobserve(entry.target);
+    }
+  });
+}, {
+  threshold: 0.1
+});
+
+if (desktopSection && morphSticky) {
+  desktopObserver.observe(desktopSection);
+}
+
+
+/* DESKTOP EXPANSION + RETURN */
+
 function updateDesktop() {
-  if (!desktopSection || !desktopDevice) return;
+  if (!desktopSection || !desktopDevice || !desktopScreen) return;
 
   const rect = desktopSection.getBoundingClientRect();
   const distance = desktopSection.offsetHeight - window.innerHeight;
 
-  const progress = smooth(
-    clamp(-rect.top / Math.max(distance, 1), 0, 1)
+  const scrollProgress = clamp(
+    -rect.top / Math.max(distance, 1),
+    0,
+    1
   );
+
+  // First half: desktop -> fullscreen
+  // Second half: fullscreen -> desktop
+
+  let progress;
+
+ if (scrollProgress <= 0.55) {
+  progress = smooth(scrollProgress / 0.55);
+} else {
+  progress = smooth(
+    (1 - scrollProgress) / 0.45
+  );
+}
 
   const startWidth = Math.min(window.innerWidth * 0.82, 1050);
   const startHeight = startWidth * 9 / 16;
 
-  desktopDevice.style.width =
-    `${startWidth + (window.innerWidth - startWidth) * progress}px`;
+  const currentWidth =
+    startWidth + (window.innerWidth - startWidth) * progress;
 
-  desktopDevice.style.height =
-    `${startHeight + (window.innerHeight - startHeight) * progress}px`;
+  const currentHeight =
+    startHeight + (window.innerHeight - startHeight) * progress;
+
+  desktopDevice.style.width = `${currentWidth}px`;
+  desktopDevice.style.height = `${currentHeight}px`;
 
   desktopDevice.style.borderRadius = `${16 * (1 - progress)}px`;
   desktopDevice.style.borderWidth = `${9 * (1 - progress)}px`;
 
-  desktopDevice.querySelectorAll(
-    ".desktop-top, .monitor-neck, .monitor-foot"
-  ).forEach(element => {
+  desktopScreen.style.inset =
+    `${25 * (1 - progress)}px ${8 * (1 - progress)}px ${8 * (1 - progress)}px`;
+
+  desktopDetails.forEach(element => {
     element.style.opacity = 1 - progress;
   });
 }
 
 
+window.addEventListener("scroll", updateDesktop, {
+  passive: true
+});
+
+window.addEventListener("resize", updateDesktop);
+
+updateDesktop();
+
+
 /* =====================================
-   PHONE FALLING ANIMATION
+   PHONE ENTRANCE + ROTATION + MORPH
 ===================================== */
 
 const phoneSection = document.getElementById("phoneMorph");
+const phoneStage = phoneSection?.querySelector(".phone-stage");
 const phoneRotation = document.getElementById("phoneRotation");
+const phoneDevice = document.getElementById("phoneDevice");
 
-let phoneHasFallen = false;
+const phoneScreen = phoneDevice?.querySelector(".phone-screen");
 
-if (phoneSection && phoneRotation) {
+const phoneDetails = phoneDevice?.querySelectorAll(
+  ".phone-camera, .phone-button"
+);
 
-  console.log("Phone animation elements found.");
+let phoneHasStarted = false;
+let phoneHasRotated = false;
+let phoneMorphStartScroll = null;
+
+const phoneStartWidth = phoneRotation?.offsetWidth || 263;
+const phoneStartHeight = phoneRotation?.offsetHeight || 508;
+
+
+/* =====================================
+   START ENTRANCE AND AUTOMATIC ROTATION
+===================================== */
+
+if (phoneSection && phoneStage && phoneRotation && phoneDevice) {
 
   const phoneObserver = new IntersectionObserver((entries) => {
 
     entries.forEach(entry => {
 
-      if (entry.isIntersecting && !phoneHasFallen) {
+      if (entry.isIntersecting && !phoneHasStarted) {
 
-        phoneHasFallen = true;
+        phoneHasStarted = true;
 
-        console.log("Phone section detected. Starting countdown.");
+        // Slide phone in from the right
+        phoneStage.classList.add("phone-entered");
 
+        // Wait 1.5 seconds, then rotate
         setTimeout(() => {
-
           phoneRotation.classList.add("fall-landscape");
-
-          console.log("Phone falling animation started.");
-
-        }, 2000);
+        }, 1500);
 
       }
 
@@ -84,37 +154,148 @@ if (phoneSection && phoneRotation) {
 
   phoneObserver.observe(phoneSection);
 
-} else {
 
-  console.error(
-    "Phone animation failed: check phoneMorph and phoneRotation IDs."
-  );
+  /* Wait until the physical rotation finishes */
 
-}
+  phoneRotation.addEventListener("animationend", (event) => {
 
+    if (event.animationName !== "phoneActuallyFalls") return;
 
-/* =====================================
-   LANDSCAPE SCREENSHOT CROSSFADE
-===================================== */
+    phoneHasRotated = true;
 
-if (phoneRotation) {
+    // Start the scroll morph from this point
+    phoneMorphStartScroll = window.scrollY;
 
-  const portrait = phoneRotation.querySelector(".phone-portrait");
-  const landscape = phoneRotation.querySelector(".phone-landscape");
+    updatePhoneMorph();
 
-  phoneRotation.addEventListener("animationstart", () => {
-    if (portrait) portrait.style.opacity = "0";
-    if (landscape) landscape.style.opacity = "1";
   });
 
 }
 
 
 /* =====================================
-   UPDATE DESKTOP ON SCROLL
+   LANDSCAPE EXPANSION + RETURN
 ===================================== */
 
-window.addEventListener("scroll", updateDesktop, { passive: true });
-window.addEventListener("resize", updateDesktop);
+function updatePhoneMorph() {
 
-updateDesktop();
+  if (
+    !phoneSection ||
+    !phoneRotation ||
+    !phoneDevice ||
+    !phoneScreen ||
+    !phoneHasRotated ||
+    phoneMorphStartScroll === null
+  ) return;
+
+  const sectionEnd =
+    phoneSection.offsetTop +
+    phoneSection.offsetHeight -
+    window.innerHeight;
+
+  const remainingDistance = Math.max(
+    sectionEnd - phoneMorphStartScroll,
+    1
+  );
+
+  const scrollProgress = clamp(
+    (window.scrollY - phoneMorphStartScroll) / remainingDistance,
+    0,
+    1
+  );
+
+  let progress;
+
+  // Expand: horizontal phone -> fullscreen
+  if (scrollProgress <= 0.42) {
+
+    progress = smooth(scrollProgress / 0.42);
+
+  }
+
+  // Brief fullscreen hold
+  else if (scrollProgress <= 0.55) {
+
+    progress = 1;
+
+  }
+
+  // Return: fullscreen -> horizontal phone
+  else {
+
+    progress = smooth(
+      (1 - scrollProgress) / 0.45
+    );
+
+  }
+
+
+  /* Target dimensions:
+     The wrapper is rotated -90deg,
+     so its unrotated dimensions are reversed.
+  */
+
+  const targetWidth = window.innerHeight;
+  const targetHeight = window.innerWidth;
+
+  const currentWidth =
+    phoneStartWidth +
+    (targetWidth - phoneStartWidth) * progress;
+
+  const currentHeight =
+    phoneStartHeight +
+    (targetHeight - phoneStartHeight) * progress;
+
+
+  /* Resize the rotation wrapper */
+
+  phoneRotation.style.width = `${currentWidth}px`;
+  phoneRotation.style.height = `${currentHeight}px`;
+
+
+  /* Resize the physical phone */
+
+  const currentBorder = 9 * (1 - progress);
+
+phoneDevice.style.width =
+  `${currentWidth - currentBorder * 2}px`;
+
+phoneDevice.style.height =
+  `${currentHeight - currentBorder * 2}px`;
+
+phoneDevice.style.borderWidth = `${currentBorder}px`;
+
+  phoneDevice.style.borderRadius =
+    `${37 * (1 - progress)}px`;
+
+
+  /* Expand the screenshot to the edges */
+
+  phoneScreen.style.inset =
+    `${7 * (1 - progress)}px`;
+
+  phoneScreen.style.borderRadius =
+    `${25 * (1 - progress)}px`;
+
+
+  /* Hide camera and side button */
+
+  phoneDetails.forEach(element => {
+
+    element.style.opacity = 1 - progress;
+
+  });
+
+}
+
+
+/* =====================================
+   SCROLL + RESIZE UPDATES
+===================================== */
+
+window.addEventListener("scroll", updatePhoneMorph, {
+  passive: true
+});
+
+window.addEventListener("resize", updatePhoneMorph);
+
