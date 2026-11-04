@@ -431,8 +431,19 @@ h2 em {
   width: 100%;
   height: 100%;
   display: block;
-  object-fit: cover;
+  object-fit: fill;
   object-position: 50% 59%;
+  transition: opacity .1s linear;
+}
+
+.desktop-screen .desktop-full-image {
+  opacity: 1;
+}
+
+.desktop-screen .desktop-clean-image {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
 }
 
 .monitor-neck {
@@ -872,14 +883,14 @@ footer b {
 
 .phone-rotation-wrapper {
   position: relative;
-  width: 245px;
-  height: 490px;
+  width: 263px;
+  height: 508px;
   flex: none;
   display: grid;
   place-items: center;
   transform-origin: center center;
   transform: rotate(0deg);
-  will-change: transform;
+  will-change: transform, width, height;
 }
 
 .phone-device {
@@ -900,7 +911,7 @@ footer b {
   inset: 7px;
   overflow: hidden;
   border-radius: 25px;
-  background: var(--beige);
+  background: var(--#f3f2ed);
 }
 
 .phone-screen img {
@@ -915,26 +926,21 @@ footer b {
 
 .phone-portrait {
   opacity: 1;
-  object-fit: cover;
+  object-fit: fill;
+  object-position: center;
 }
 
 .phone-screen img.phone-landscape {
   opacity: 0;
-
   position: absolute;
   left: 50%;
   top: 50%;
-  right: auto;
-  bottom: auto;
-
-  width: 213%;
-  height: 47%;
-
+  width: 100;
+  height: 100;
   object-fit: contain;
   object-position: center;
-
-  transform: translate(-50%, -50%) rotate(90deg) scale(2.225);
-  background: var(--beige);
+  transform: translate(-50%, -50%) rotate(90deg) scale(2.15);
+  background: var(--#f3f2ed);
 }
 
 /* Phone details */
@@ -964,7 +970,7 @@ footer b {
 /* Counterclockwise physical rotation */
 
 .phone-rotation-wrapper.fall-landscape {
-  animation: phoneActuallyFalls 1.5s cubic-bezier(.65,0,.35,1) forwards;
+  animation: phoneActuallyFalls 2s cubic-bezier(.65,0,.35,1) forwards;
 }
 
 @keyframes phoneActuallyFalls {
@@ -1002,11 +1008,15 @@ footer b {
     min-height: 440px;
   }
 
-  .phone-rotation-wrapper,
-  .phone-device {
-    width: 210px;
-    height: 420px;
-  }
+  .phone-rotation-wrapper {
+  width: 228px;
+  height: 438px;
+}
+
+.phone-device {
+  width: 210px;
+  height: 420px;
+}
 }
 
 /* =====================================
@@ -1024,7 +1034,7 @@ footer b {
 }
 
 .phone-stage.phone-entered .phone-entry-wrapper {
-  animation: phoneEnterFromRight .9s cubic-bezier(.22,.8,.25,1) forwards;
+  animation: phoneEnterFromRight 1.5s cubic-bezier(.22,.8,.25,1) forwards;
 }
 
 @keyframes phoneEnterFromRight {

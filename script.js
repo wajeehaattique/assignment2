@@ -87,6 +87,12 @@ function updateDesktop() {
   desktopDetails.forEach(element => {
     element.style.opacity = 1 - progress;
   });
+
+  const fullImage = desktopScreen.querySelector(".desktop-full-image");
+const cleanImage = desktopScreen.querySelector(".desktop-clean-image");
+
+fullImage.style.opacity = 1 - progress;
+cleanImage.style.opacity = progress;
 }
 
 
@@ -118,8 +124,8 @@ let phoneHasStarted = false;
 let phoneHasRotated = false;
 let phoneMorphStartScroll = null;
 
-const phoneStartWidth = phoneRotation?.offsetWidth || 263;
-const phoneStartHeight = phoneRotation?.offsetHeight || 508;
+const phoneStartWidth = phoneDevice?.offsetWidth || 263;
+const phoneStartHeight = phoneDevice?.offsetHeight || 508;
 
 
 /* =====================================
@@ -139,10 +145,10 @@ if (phoneSection && phoneStage && phoneRotation && phoneDevice) {
         // Slide phone in from the right
         phoneStage.classList.add("phone-entered");
 
-        // Wait 1.5 seconds, then rotate
+        // Wait 2 seconds, then rotate
         setTimeout(() => {
           phoneRotation.classList.add("fall-landscape");
-        }, 1500);
+        }, 2000);
 
       }
 
@@ -158,20 +164,11 @@ if (phoneSection && phoneStage && phoneRotation && phoneDevice) {
   /* Wait until the physical rotation finishes */
 
   phoneRotation.addEventListener("animationend", (event) => {
-
-    if (event.animationName !== "phoneActuallyFalls") return;
-
-    phoneHasRotated = true;
-
-    // Start the scroll morph from this point
-    phoneMorphStartScroll = window.scrollY;
-
-    updatePhoneMorph();
-
-  });
-
-}
-
+  if (event.animationName !== "phoneActuallyFalls") return;
+  phoneHasRotated = true;
+  phoneMorphStartScroll = window.scrollY;
+  updatePhoneMorph();
+});
 
 /* =====================================
    LANDSCAPE EXPANSION + RETURN
@@ -246,23 +243,17 @@ function updatePhoneMorph() {
     phoneStartHeight +
     (targetHeight - phoneStartHeight) * progress;
 
-
   /* Resize the rotation wrapper */
 
   phoneRotation.style.width = `${currentWidth}px`;
   phoneRotation.style.height = `${currentHeight}px`;
 
-
   /* Resize the physical phone */
 
   const currentBorder = 9 * (1 - progress);
 
-phoneDevice.style.width =
-  `${currentWidth - currentBorder * 2}px`;
-
-phoneDevice.style.height =
-  `${currentHeight - currentBorder * 2}px`;
-
+phoneDevice.style.width = `${currentWidth}px`;
+phoneDevice.style.height = `${currentHeight}px`;
 phoneDevice.style.borderWidth = `${currentBorder}px`;
 
   phoneDevice.style.borderRadius =
@@ -298,4 +289,4 @@ window.addEventListener("scroll", updatePhoneMorph, {
 });
 
 window.addEventListener("resize", updatePhoneMorph);
-
+}
