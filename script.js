@@ -282,6 +282,11 @@ phoneDevice.style.borderWidth = `${currentBorder}px`;
 
   });
 
+  const phoneCaption = phoneSection.querySelector(".morph-caption");
+
+if (phoneCaption) {
+  phoneCaption.style.opacity = 1 - progress;
+}
 }
 
 
