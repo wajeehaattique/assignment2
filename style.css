@@ -914,7 +914,7 @@ footer b {
   object-fit: contain;
   object-position: center;
 
-  transform: translate(-50%, -50%) rotate(90deg) scale(2.2);
+  transform: translate(-50%, -50%) rotate(90deg) scale(2.225);
   background: var(--beige);
 }
 
@@ -945,7 +945,7 @@ footer b {
 /* Counterclockwise physical rotation */
 
 .phone-rotation-wrapper.fall-landscape {
-  animation: phoneActuallyFalls 1.8s cubic-bezier(.65,0,.35,1) forwards;
+  animation: phoneActuallyFalls 1.5s cubic-bezier(.65,0,.35,1) forwards;
 }
 
 @keyframes phoneActuallyFalls {

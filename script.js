@@ -72,7 +72,7 @@ if (phoneSection && phoneRotation) {
 
           console.log("Phone falling animation started.");
 
-        }, 3000);
+        }, 2000);
 
       }
 
