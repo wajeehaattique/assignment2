@@ -435,100 +435,6 @@ h2 em {
   background: #bdb6ac;
 }
 
-
-/* =====================================
-   PHONE PHYSICAL ROTATION
-===================================== */
-
-.phone-stage {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: grid;
-  place-items: center;
-}
-
-/*
-  The phone is a portrait device.
-  JavaScript rotates it by 90 degrees.
-*/
-
-.phone-device {
-  position: relative;
-
-  width: 210px;
-  height: 420px;
-  flex: none;
-
-  background: #292929;
-  border: 9px solid #292929;
-  border-radius: 37px;
-
-  overflow: hidden;
-
-  box-shadow: 0 28px 55px rgba(16,30,53,.2);
-
-  transform-origin: center center;
-  transform: translateY(0) rotate(0deg) scale(1);
-
-  will-change: transform;
-}
-
-.phone-screen {
-  position: absolute;
-  inset: 7px;
-
-  overflow: hidden;
-  border-radius: 25px;
-  background: var(--beige);
-}
-
-.phone-screen img {
-  position: absolute;
-  inset: 0;
-
-  width: 100%;
-  height: 100%;
-
-  object-fit: cover;
-  object-position: center;
-
-  transition: opacity .7s ease;
-}
-
-.phone-landscape {
-  opacity: 0;
-}
-
-.phone-camera {
-  position: absolute;
-  z-index: 3;
-
-  top: 9px;
-  left: 50%;
-
-  transform: translateX(-50%);
-
-  width: 48px;
-  height: 9px;
-
-  background: #292929;
-  border-radius: 20px;
-}
-
-.phone-button {
-  position: absolute;
-  right: -9px;
-  top: 100px;
-
-  width: 3px;
-  height: 50px;
-
-  border-radius: 0 4px 4px 0;
-  background: #555;
-}
-
-
 /* =====================================
    ANOTHER PROJECT SLIDESHOW
 ===================================== */
@@ -932,87 +838,114 @@ footer b {
 
 }
 
-/* PHONE FALLING ANIMATION */
-
-.phone-rotation-wrapper {
-  width: 210px;
-  height: 420px;
-
-  display: grid;
-  place-items: center;
-
-  transform-origin: center center;
-  transform: rotate(0deg);
-
-  will-change: transform;
-}
-
-.phone-rotation-wrapper.fall-landscape {
-  animation: phoneFall 1.8s cubic-bezier(.65, 0, .35, 1) forwards;
-}
-
-@keyframes phoneFall {
-
-  0% {
-    transform: rotate(0deg);
-  }
-
-  65% {
-    transform: rotate(98deg);
-  }
-
-  82% {
-    transform: rotate(86deg);
-  }
-
-  100% {
-    transform: rotate(90deg);
-  }
-
-}
-
-.phone-rotation-wrapper.fall-landscape .phone-portrait {
-  opacity: 0;
-}
-
-.phone-rotation-wrapper.fall-landscape .phone-landscape {
-  opacity: 1;
-}
-
-
 /* =====================================
-   DEFINITIVE PHONE ROTATION FIX
+   PHONE — CLEAN FINAL VERSION
 ===================================== */
 
 .phone-stage {
+  position: relative;
+  width: 100%;
+  min-height: 540px;
   display: grid;
   place-items: center;
   overflow: visible;
 }
 
 .phone-rotation-wrapper {
-  width: 210px;
-  height: 420px;
   position: relative;
+  width: 245px;
+  height: 490px;
   flex: none;
-
   display: grid;
   place-items: center;
-
-  transform: rotate(0deg);
   transform-origin: center center;
-
+  transform: rotate(0deg);
   will-change: transform;
 }
 
 .phone-device {
+  position: relative;
+  width: 245px;
+  height: 490px;
+  flex: none;
+  background: #292929;
+  border: 9px solid #292929;
+  border-radius: 37px;
+  overflow: hidden;
+  box-shadow: 0 28px 55px rgba(16,30,53,.2);
   transform: none !important;
-  width: 210px;
-  height: 420px;
 }
 
+.phone-screen {
+  position: absolute;
+  inset: 7px;
+  overflow: hidden;
+  border-radius: 25px;
+  background: var(--beige);
+}
+
+.phone-screen img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-position: center;
+  transition: opacity .7s ease;
+}
+
+.phone-portrait {
+  opacity: 1;
+  object-fit: cover;
+}
+
+.phone-screen img.phone-landscape {
+  opacity: 0;
+
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  right: auto;
+  bottom: auto;
+
+  width: 213%;
+  height: 47%;
+
+  object-fit: contain;
+  object-position: center;
+
+  transform: translate(-50%, -50%) rotate(90deg) scale(2.2);
+  background: var(--beige);
+}
+
+/* Phone details */
+
+.phone-camera {
+  position: absolute;
+  z-index: 3;
+  top: 9px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48px;
+  height: 9px;
+  background: #292929;
+  border-radius: 20px;
+}
+
+.phone-button {
+  position: absolute;
+  right: -9px;
+  top: 100px;
+  width: 3px;
+  height: 50px;
+  border-radius: 0 4px 4px 0;
+  background: #555;
+}
+
+/* Counterclockwise physical rotation */
+
 .phone-rotation-wrapper.fall-landscape {
-  animation: phoneActuallyFalls 1.8s cubic-bezier(.65, 0, .35, 1) forwards !important;
+  animation: phoneActuallyFalls 1.8s cubic-bezier(.65,0,.35,1) forwards;
 }
 
 @keyframes phoneActuallyFalls {
@@ -1021,27 +954,19 @@ footer b {
   }
 
   55% {
-    transform: rotate(98deg);
+    transform: rotate(-98deg);
   }
 
   75% {
-    transform: rotate(86deg);
+    transform: rotate(-86deg);
   }
 
   100% {
-    transform: rotate(90deg);
+    transform: rotate(-90deg);
   }
 }
 
-.phone-rotation-wrapper .phone-portrait {
-  opacity: 1;
-  transition: opacity .7s ease;
-}
-
-.phone-rotation-wrapper .phone-landscape {
-  opacity: 0;
-  transition: opacity .7s ease;
-}
+/* Screenshot transition */
 
 .phone-rotation-wrapper.fall-landscape .phone-portrait {
   opacity: 0;
@@ -1051,20 +976,16 @@ footer b {
   opacity: 1;
 }
 
-@media (max-width: 700px) {
-  .cinema-screen {
-    aspect-ratio: 3 / 4;
+/* Smaller phone on narrow screens */
+
+@media (max-width: 600px) {
+  .phone-stage {
+    min-height: 440px;
   }
 
-  .cinema-panels {
-    flex-direction: column;
-  }
-
-  .cinema-panels:hover .cinema-panel {
-    flex: 1;
-  }
-
-  .cinema-panels .cinema-panel:hover {
-    flex: 1.5;
+  .phone-rotation-wrapper,
+  .phone-device {
+    width: 210px;
+    height: 420px;
   }
 }
