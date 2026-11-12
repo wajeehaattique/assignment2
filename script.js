@@ -64,10 +64,20 @@ function updateDesktop() {
   const startWidth = Math.min(window.innerWidth * 0.82, 1050);
   const startHeight = (startWidth * 9) / 16;
 
-  const currentWidth = startWidth + (window.innerWidth - startWidth) * progress;
+  const targetWidth = window.innerWidth;
 
-  const currentHeight =
-    startHeight + (window.innerHeight - startHeight) * progress;
+// On phones, keep the desktop monitor in 16:9 proportions.
+// On larger screens, preserve the existing fullscreen behavior.
+const targetHeight =
+  window.innerWidth <= 760
+    ? targetWidth * 9 / 16
+    : window.innerHeight;
+
+const currentWidth =
+  startWidth + (targetWidth - startWidth) * progress;
+
+const currentHeight =
+  startHeight + (targetHeight - startHeight) * progress;
 
   desktopDevice.style.width = `${currentWidth}px`;
   desktopDevice.style.height = `${currentHeight}px`;
@@ -120,8 +130,11 @@ let phoneHasStarted = false;
 let phoneHasRotated = false;
 let phoneMorphStartScroll = null;
 
-const phoneStartWidth = phoneDevice?.offsetWidth || 263;
-const phoneStartHeight = phoneDevice?.offsetHeight || 508;
+const phoneStartWidth = phoneRotation?.offsetWidth || 263;
+const phoneStartHeight = phoneRotation?.offsetHeight || 508;
+
+const phoneDeviceStartWidth = phoneDevice?.offsetWidth || 245;
+const phoneDeviceStartHeight = phoneDevice?.offsetHeight || 490;
 
 /* =====================================
    START ENTRANCE AND AUTOMATIC ROTATION
@@ -212,10 +225,18 @@ if (phoneSection && phoneStage && phoneRotation && phoneDevice) {
     const targetHeight = window.innerWidth;
 
     const currentWidth =
-      phoneStartWidth + (targetWidth - phoneStartWidth) * progress;
+  phoneStartWidth + (targetWidth - phoneStartWidth) * progress;
 
-    const currentHeight =
-      phoneStartHeight + (targetHeight - phoneStartHeight) * progress;
+const currentHeight =
+  phoneStartHeight + (targetHeight - phoneStartHeight) * progress;
+
+const currentDeviceWidth =
+  phoneDeviceStartWidth +
+  (targetWidth - phoneDeviceStartWidth) * progress;
+
+const currentDeviceHeight =
+  phoneDeviceStartHeight +
+  (targetHeight - phoneDeviceStartHeight) * progress;
 
     /* Resize the rotation wrapper */
 
@@ -226,8 +247,8 @@ if (phoneSection && phoneStage && phoneRotation && phoneDevice) {
 
     const currentBorder = 9 * (1 - progress);
 
-    phoneDevice.style.width = `${currentWidth}px`;
-    phoneDevice.style.height = `${currentHeight}px`;
+    phoneDevice.style.width = `${currentDeviceWidth}px`;
+phoneDevice.style.height = `${currentDeviceHeight}px`;
     phoneDevice.style.borderWidth = `${currentBorder}px`;
 
     phoneDevice.style.borderRadius = `${37 * (1 - progress)}px`;

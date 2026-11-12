@@ -1089,3 +1089,20 @@ footer b {
 .phone-button {
   transition: opacity 0.1s linear;
 }
+
+@media (max-width: 600px) {
+  .phone-stage {
+    min-height: 440px;
+    padding: 10px 0;
+  }
+
+  .phone-rotation-wrapper {
+    width: 228px;
+    height: 438px;
+  }
+
+  .phone-device {
+    width: 210px;
+    height: 420px;
+  }
+}
