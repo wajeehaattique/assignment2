@@ -469,9 +469,9 @@ h2 em {
 .monitor-neck {
   position: absolute;
   width: 12%;
-  height: clamp(14px, 2.67vw, 28px);
+  height: clamp(11px, 2.2vw, 24px);
   left: 44%;
-  top: calc(100% + clamp(5px, 1.2vw, 12px));
+  top: calc(100% + clamp(2px, 0.5vw, 5px));
   background: linear-gradient(90deg, #aaa39a, #e4ded4, #aaa39a);
   z-index: -1;
 }
@@ -484,7 +484,7 @@ h2 em {
   top: calc(100% + clamp(13px, 2.57vw, 27px));
   border-radius: 50%;
   background: #bdb6ac;
-  z-index: -1;
+  z-index: -2;
 }
 
 /* =====================================
@@ -869,6 +869,20 @@ footer b {
     font-size: 0.53rem;
     gap: 1rem;
   }
+
+  .monitor-neck {
+  z-index: -1;
+}
+
+.monitor-foot {
+  z-index: -2;
+}
+
+#desktopMorph .morph-caption {
+  bottom: 45px;
+  transform: none;
+  z-index: 5;
+}
 }
 
 /* =====================================
@@ -956,7 +970,7 @@ footer b {
   height: 100%;
   object-fit: contain;
   object-position: center;
-  transform: translate(-50%, -50%) rotate(90deg) scale(2.15);
+  transform: translate(-50%, -50%) rotate(90deg) scale(1);
   background: #f3f2ed;
 }
 
@@ -968,7 +982,7 @@ footer b {
   height: 100%;
   object-fit: contain;
   object-position: center;
-  transform: translate(-50%, -50%) rotate(90deg) scale(2.15);
+  transform: translate(-50%, -50%) rotate(90deg) scale(1);
   opacity: 0;
   z-index: 4;
 }
