@@ -379,6 +379,22 @@ h2 em {
   transition:
     opacity 0.8s ease,
     translate 0.8s ease;
+  overflow: visible;
+  isolation: isolate;
+  z-index: 1;
+}
+
+.desktop-device::after {
+  content: "";
+  position: absolute;
+  left: -9px;
+  right: -9px;
+  bottom: -9px;
+  height: 18px;
+  background: #292929;
+  border-radius: 0 0 7px 7px;
+  z-index: 1;
+  pointer-events: none;
 }
 
 .morph-sticky.is-visible .desktop-device {
@@ -428,6 +444,7 @@ h2 em {
   overflow: hidden;
   background: var(--beige);
   transition: none;
+  z-index: 2;
 }
 
 .desktop-screen img {
@@ -452,10 +469,11 @@ h2 em {
 .monitor-neck {
   position: absolute;
   width: 12%;
-  height: 28px;
+  height: clamp(14px, 2.67vw, 28px);
   left: 44%;
-  top: 100%;
+  top: calc(100% + clamp(5px, 1.2vw, 12px));
   background: linear-gradient(90deg, #aaa39a, #e4ded4, #aaa39a);
+  z-index: -1;
 }
 
 .monitor-foot {
@@ -463,9 +481,10 @@ h2 em {
   width: 25%;
   height: 12px;
   left: 37.5%;
-  top: calc(100% + 27px);
+  top: calc(100% + clamp(13px, 2.57vw, 27px));
   border-radius: 50%;
   background: #bdb6ac;
+  z-index: -1;
 }
 
 /* =====================================
@@ -816,11 +835,6 @@ footer b {
 
   .morph-caption strong {
     font-size: 0.85rem;
-  }
-
-  .monitor-neck,
-  .monitor-foot {
-    display: none;
   }
 
   .another-heading {
