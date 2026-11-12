@@ -1,3 +1,4 @@
+
 /* =====================================
    COLOURS AND GLOBAL SETTINGS
 ===================================== */
@@ -9,7 +10,6 @@
   --orange: #f07842;
   --midnight: #101e35;
   --cyan: #35d6ff;
-
   --muted: #77736d;
   --line: rgba(41, 41, 41, 0.14);
 
@@ -40,12 +40,10 @@ body::before {
   inset: 0;
   z-index: -1;
   pointer-events: none;
-
   background-image: radial-gradient(
     rgba(41, 41, 41, 0.12) 0.65px,
     transparent 0.65px
   );
-
   background-size: 25px 25px;
   opacity: 0.23;
 }
@@ -148,7 +146,6 @@ h2 em {
 .intro {
   min-height: 100svh;
   padding-top: 2rem;
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -157,10 +154,8 @@ h2 em {
 .intro-grid {
   width: min(1120px, 100%);
   margin: 5vh auto 2rem;
-
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
-
   align-items: center;
   gap: 5vw;
 }
@@ -195,15 +190,6 @@ h2 em {
   aspect-ratio: 1 / 1.12;
   display: grid;
   place-items: center;
-}
-
-.avatar-photo {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-  position: relative;
-  z-index: 1;
 }
 
 .avatar-photo-wrap {
@@ -283,7 +269,7 @@ h2 em {
 }
 
 /* =====================================
-   DESKTOP SCROLL MORPH
+   SHARED SCROLL MORPH SECTIONS
 ===================================== */
 
 .morph-section,
@@ -295,30 +281,24 @@ h2 em {
 .morph-sticky {
   position: sticky;
   top: 0;
-
   width: 100%;
   height: 100svh;
   min-height: 450px;
-
   display: grid;
   place-items: center;
-
   overflow: hidden;
   background: var(--ivory);
 }
 
-#desktopMorph .morph-label {
+.morph-label {
   position: absolute;
   top: 17px;
   left: 0;
   right: 0;
   width: 100%;
   padding: 0 21px;
-  box-sizing: border-box;
-
   display: flex;
   justify-content: space-between;
-
   color: var(--muted);
   font-size: 10px;
   z-index: 5;
@@ -330,18 +310,16 @@ h2 em {
 }
 
 #desktopMorph .morph-caption {
-  transform: translateY(+23px);
+  transform: translateY(23px);
 }
 
 .morph-caption {
   position: absolute;
   bottom: 25px;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 5px;
-
   text-align: center;
   pointer-events: none;
 }
@@ -355,46 +333,26 @@ h2 em {
   transition: opacity 0.1s linear;
 }
 
-/* DESKTOP DEVICE */
+/* =====================================
+   DESKTOP DEVICE
+===================================== */
 
 .desktop-device {
   position: relative;
   box-sizing: border-box;
-
   width: min(82vw, 1050px);
   aspect-ratio: 16 / 9;
-
   background: #292929;
   border: 9px solid #292929;
   border-radius: 16px;
-
   box-shadow: 0 25px 55px rgba(16, 30, 53, 0.16);
-
   transform-origin: center center;
   will-change: width, height, border-radius;
-
-  /* Entrance animation */
   opacity: 0;
   translate: 0 25px;
   transition:
     opacity 0.8s ease,
     translate 0.8s ease;
-  overflow: visible;
-  isolation: isolate;
-  z-index: 1;
-}
-
-.desktop-device::after {
-  content: "";
-  position: absolute;
-  left: -9px;
-  right: -9px;
-  bottom: -9px;
-  height: 18px;
-  background: #292929;
-  border-radius: 0 0 7px 7px;
-  z-index: 1;
-  pointer-events: none;
 }
 
 .morph-sticky.is-visible .desktop-device {
@@ -409,9 +367,7 @@ h2 em {
   top: 0;
   left: 0;
   right: 0;
-
   padding: 0 10px;
-
   display: flex;
   align-items: center;
   gap: 5px;
@@ -444,7 +400,6 @@ h2 em {
   overflow: hidden;
   background: var(--beige);
   transition: none;
-  z-index: 2;
 }
 
 .desktop-screen img {
@@ -469,11 +424,10 @@ h2 em {
 .monitor-neck {
   position: absolute;
   width: 12%;
-  height: clamp(11px, 2.2vw, 24px);
+  height: 28px;
   left: 44%;
-  top: calc(100% + clamp(2px, 0.5vw, 5px));
+  top: 100%;
   background: linear-gradient(90deg, #aaa39a, #e4ded4, #aaa39a);
-  z-index: -1;
 }
 
 .monitor-foot {
@@ -481,14 +435,186 @@ h2 em {
   width: 25%;
   height: 12px;
   left: 37.5%;
-  top: calc(100% + clamp(13px, 2.57vw, 27px));
+  top: calc(100% + 27px);
   border-radius: 50%;
   background: #bdb6ac;
-  z-index: -2;
 }
 
 /* =====================================
-   ANOTHER PROJECT SLIDESHOW
+   PHONE STAGE
+===================================== */
+
+.phone-stage {
+  position: relative;
+  width: 100%;
+  min-height: 540px;
+  display: grid;
+  place-items: center;
+  overflow: visible;
+}
+
+.phone-entry-wrapper {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: max-content;
+  height: max-content;
+  opacity: 0;
+  transform: translateX(55vw);
+}
+
+.phone-stage.phone-entered .phone-entry-wrapper {
+  animation: phoneEnterFromRight 1.5s cubic-bezier(0.22, 0.8, 0.25, 1) forwards;
+}
+
+@keyframes phoneEnterFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(55vw);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.phone-rotation-wrapper {
+  position: relative;
+  width: 263px;
+  height: 508px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  transform-origin: center center;
+  transform: rotate(0deg);
+  will-change: transform, width, height;
+}
+
+.phone-device {
+  position: relative;
+  width: 245px;
+  height: 490px;
+  flex: none;
+  background: #292929;
+  border: 9px solid #292929;
+  border-radius: 37px;
+  overflow: hidden;
+  box-shadow: 0 28px 55px rgba(16, 30, 53, 0.2);
+  transform: none !important;
+  will-change: width, height, border-radius, border-width;
+}
+
+.phone-screen {
+  position: absolute;
+  inset: 7px;
+  overflow: hidden;
+  border-radius: 25px;
+  background: #f3f2ed;
+  transition: none;
+}
+
+.phone-screen img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-position: center;
+  transition: opacity 0.7s ease;
+}
+
+.phone-portrait {
+  opacity: 1;
+  object-fit: fill;
+  object-position: center;
+}
+
+.phone-screen img.phone-landscape {
+  opacity: 0;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  transform: translate(-50%, -50%) rotate(90deg) scale(2.15);
+  background: #f3f2ed;
+}
+
+.phone-screen img.phone-landscape-clean {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  transform: translate(-50%, -50%) rotate(90deg) scale(2.15);
+  opacity: 0;
+  z-index: 4;
+}
+
+/* PHONE DETAILS */
+
+.phone-camera {
+  position: absolute;
+  z-index: 5;
+  top: 9px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48px;
+  height: 9px;
+  background: #292929;
+  border-radius: 20px;
+}
+
+.phone-button {
+  position: absolute;
+  z-index: 5;
+  right: -9px;
+  top: 100px;
+  width: 3px;
+  height: 50px;
+  border-radius: 0 4px 4px 0;
+  background: #555;
+}
+
+/* PHONE ROTATION */
+
+.phone-rotation-wrapper.fall-landscape {
+  animation: phoneActuallyFalls 2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+@keyframes phoneActuallyFalls {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  55% {
+    transform: rotate(-98deg);
+  }
+
+  75% {
+    transform: rotate(-86deg);
+  }
+
+  100% {
+    transform: rotate(-90deg);
+  }
+}
+
+.phone-rotation-wrapper.fall-landscape .phone-portrait {
+  opacity: 0;
+}
+
+.phone-rotation-wrapper.fall-landscape .phone-landscape {
+  opacity: 1;
+}
+
+/* =====================================
+   ANOTHER PROJECT / CINEMATIC SCREEN
 ===================================== */
 
 .another-section {
@@ -516,10 +642,6 @@ h2 em {
   transform: translateX(-50%) scale(1.008);
 }
 
-/* =====================================
-   THREE-PANEL CINEMATIC SCREEN
-===================================== */
-
 .cinema-screen {
   position: relative;
   width: 100%;
@@ -536,8 +658,6 @@ h2 em {
   height: 100%;
   overflow: visible;
 }
-
-/* Individual panels */
 
 .cinema-panel {
   position: relative;
@@ -562,13 +682,9 @@ h2 em {
   background: #090d21;
 }
 
-/* Other panels move only slightly */
-
 .cinema-panels:hover .cinema-panel {
   flex: 0.92;
 }
-
-/* Hovered panel bulges outward */
 
 .cinema-panels .cinema-panel:hover {
   flex: 1.16;
@@ -580,15 +696,11 @@ h2 em {
   transform: scale(1.04);
 }
 
-/* Individual screenshot positioning */
-
 .cinema-panel:nth-child(1) img,
 .cinema-panel:nth-child(2) img,
 .cinema-panel:nth-child(3) img {
   object-position: center 48%;
 }
-
-/* Keep the outer screenshots safely inside the cinema edges */
 
 .cinema-panel:first-child {
   transform-origin: left center;
@@ -598,13 +710,9 @@ h2 em {
   transform-origin: right center;
 }
 
-/* Keep the middle screenshot expanding from its center */
-
 .cinema-panel:nth-child(2) {
   transform-origin: center center;
 }
-
-/* Full-width cinematic curved edges */
 
 .cinema-cut {
   position: absolute;
@@ -629,9 +737,7 @@ h2 em {
 .cinema-meta {
   display: flex;
   justify-content: space-between;
-
   color: var(--muted);
-
   margin: 1rem auto 0;
   width: min(100%, 1200px);
 }
@@ -643,16 +749,17 @@ h2 em {
 .contact-section {
   padding-top: 7rem;
   padding-bottom: 2rem;
-
-  background: linear-gradient(180deg, transparent, rgba(233, 226, 215, 0.55));
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(233, 226, 215, 0.55)
+  );
 }
 
 .contact-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-
   gap: clamp(2rem, 7vw, 7rem);
-
   margin: 4rem auto 6rem;
   width: min(1100px, 100%);
 }
@@ -673,7 +780,6 @@ h2 em {
   display: flex;
   align-items: center;
   gap: 1rem;
-
   border-top: 1px solid var(--line);
   padding: 1rem 0;
 }
@@ -693,15 +799,13 @@ h2 em {
   font-style: normal;
 }
 
-/* FORM */
+/* CONTACT FORM */
 
 .contact-form {
   background: rgba(255, 255, 255, 0.56);
   border: 1px solid rgba(41, 41, 41, 0.08);
   border-radius: 16px;
-
   padding: clamp(1.2rem, 3vw, 2.2rem);
-
   box-shadow: 0 18px 45px rgba(41, 41, 41, 0.05);
 }
 
@@ -715,18 +819,13 @@ h2 em {
 .contact-form textarea {
   display: block;
   width: 100%;
-
   margin-top: 0.55rem;
-
   border: 1px solid var(--line);
   background: #f9f7f2;
-
   border-radius: 8px;
   padding: 0.95rem 1rem;
-
   font: 400 0.95rem var(--body);
   color: var(--charcoal);
-
   outline: none;
   resize: vertical;
 }
@@ -741,20 +840,14 @@ h2 em {
   width: 100%;
   border: 0;
   border-radius: 8px;
-
   padding: 1rem 1.2rem;
-
   background: var(--orange);
   color: white;
-
   font: 600 0.75rem var(--mono);
   letter-spacing: 0.1em;
-
   cursor: pointer;
-
   display: flex;
   justify-content: space-between;
-
   transition:
     background 0.2s ease,
     transform 0.2s ease;
@@ -772,13 +865,13 @@ h2 em {
   margin: 0.8rem 0 0;
 }
 
+/* FOOTER */
+
 footer {
   border-top: 1px solid var(--line);
   padding: 1.5rem 0;
-
   display: flex;
   justify-content: space-between;
-
   color: var(--muted);
 }
 
@@ -791,6 +884,7 @@ footer b {
 ===================================== */
 
 @media (max-width: 760px) {
+
   .topline,
   .section-kicker {
     font-size: 0.55rem;
@@ -837,6 +931,11 @@ footer b {
     font-size: 0.85rem;
   }
 
+  .monitor-neck,
+  .monitor-foot {
+    display: none;
+  }
+
   .another-heading {
     display: block;
     margin: 3rem 0 2rem;
@@ -869,20 +968,28 @@ footer b {
     font-size: 0.53rem;
     gap: 1rem;
   }
-
-  .monitor-neck {
-  z-index: -1;
 }
 
-.monitor-foot {
-  z-index: -2;
-}
+/* =====================================
+   SMALL PHONE SCREENS
+===================================== */
 
-#desktopMorph .morph-caption {
-  bottom: 45px;
-  transform: none;
-  z-index: 5;
-}
+@media (max-width: 600px) {
+
+  .phone-stage {
+    min-height: 440px;
+  }
+
+  .phone-rotation-wrapper {
+    width: 228px;
+    height: 438px;
+  }
+
+  .phone-device {
+    width: 210px;
+    height: 420px;
+  }
+
 }
 
 /* =====================================
@@ -890,247 +997,42 @@ footer b {
 ===================================== */
 
 @media (prefers-reduced-motion: reduce) {
+
   html {
     scroll-behavior: auto;
   }
 
-  .cinema-wrap {
+  .cinema-wrap,
+  .cinema-panel,
+  .cinema-panel img {
     transition: none;
   }
-}
 
-/* =====================================
-   PHONE — CLEAN FINAL VERSION
-===================================== */
-
-.phone-stage {
-  position: relative;
-  width: 100%;
-  min-height: 540px;
-  display: grid;
-  place-items: center;
-  overflow: visible;
-}
-
-.phone-rotation-wrapper {
-  position: relative;
-  width: 263px;
-  height: 508px;
-  flex: none;
-  display: grid;
-  place-items: center;
-  transform-origin: center center;
-  transform: rotate(0deg);
-  will-change: transform, width, height;
-}
-
-.phone-device {
-  position: relative;
-  width: 245px;
-  height: 490px;
-  flex: none;
-  background: #292929;
-  border: 9px solid #292929;
-  border-radius: 37px;
-  overflow: hidden;
-  box-shadow: 0 28px 55px rgba(16, 30, 53, 0.2);
-  transform: none !important;
-}
-
-.phone-screen {
-  position: absolute;
-  inset: 7px;
-  overflow: hidden;
-  border-radius: 25px;
-  background: #f3f2ed;
-}
-
-.phone-screen img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-position: center;
-  transition: opacity 0.7s ease;
-}
-
-.phone-portrait {
-  opacity: 1;
-  object-fit: fill;
-  object-position: center;
-}
-
-.phone-screen img.phone-landscape {
-  opacity: 0;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center;
-  transform: translate(-50%, -50%) rotate(90deg) scale(1);
-  background: #f3f2ed;
-}
-
-.phone-screen img.phone-landscape-clean {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center;
-  transform: translate(-50%, -50%) rotate(90deg) scale(1);
-  opacity: 0;
-  z-index: 4;
-}
-
-/* Phone details */
-
-.phone-camera {
-  position: absolute;
-  z-index: 3;
-  top: 9px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 48px;
-  height: 9px;
-  background: #292929;
-  border-radius: 20px;
-}
-
-.phone-button {
-  position: absolute;
-  right: -9px;
-  top: 100px;
-  width: 3px;
-  height: 50px;
-  border-radius: 0 4px 4px 0;
-  background: #555;
-}
-
-/* Counterclockwise physical rotation */
-
-.phone-rotation-wrapper.fall-landscape {
-  animation: phoneActuallyFalls 2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
-}
-
-@keyframes phoneActuallyFalls {
-  0% {
-    transform: rotate(0deg);
+  .phone-entry-wrapper,
+  .phone-rotation-wrapper {
+    animation: none !important;
   }
 
-  55% {
-    transform: rotate(-98deg);
+  .phone-entry-wrapper {
+    opacity: 1;
+    transform: none;
   }
 
-  75% {
-    transform: rotate(-86deg);
-  }
-
-  100% {
+  .phone-rotation-wrapper {
     transform: rotate(-90deg);
   }
-}
 
-/* Screenshot transition */
-
-.phone-rotation-wrapper.fall-landscape .phone-portrait {
-  opacity: 0;
-}
-
-.phone-rotation-wrapper.fall-landscape .phone-landscape {
-  opacity: 1;
-}
-
-/* Smaller phone on narrow screens */
-
-@media (max-width: 600px) {
-  .phone-stage {
-    min-height: 440px;
+  .phone-portrait {
+    opacity: 0 !important;
   }
 
-  .phone-rotation-wrapper {
-    width: 228px;
-    height: 438px;
+  .phone-landscape {
+    opacity: 1 !important;
   }
 
-  .phone-device {
-    width: 210px;
-    height: 420px;
-  }
-}
-
-/* =====================================
-   PHONE ENTRANCE FROM RIGHT
-===================================== */
-
-.phone-entry-wrapper {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: max-content;
-  height: max-content;
-  opacity: 0;
-  transform: translateX(55vw);
-}
-
-.phone-stage.phone-entered .phone-entry-wrapper {
-  animation: phoneEnterFromRight 1.5s cubic-bezier(0.22, 0.8, 0.25, 1) forwards;
-}
-
-@keyframes phoneEnterFromRight {
-  from {
-    opacity: 0;
-    transform: translateX(55vw);
-  }
-
-  to {
+  .desktop-device {
     opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* =====================================
-   PHONE SCROLL MORPH
-===================================== */
-
-.phone-rotation-wrapper {
-  will-change: transform, width, height;
-}
-
-.phone-device {
-  will-change: width, height, border-radius, border-width;
-}
-
-.phone-screen {
-  transition: none;
-}
-
-.phone-screen img {
-  transition: opacity 0.7s ease;
-}
-
-.phone-camera,
-.phone-button {
-  transition: opacity 0.1s linear;
-}
-
-@media (max-width: 600px) {
-  .phone-stage {
-    min-height: 440px;
-    padding: 10px 0;
+    translate: 0 0;
   }
 
-  .phone-rotation-wrapper {
-    width: 228px;
-    height: 438px;
-  }
-
-  .phone-device {
-    width: 210px;
-    height: 420px;
-  }
 }

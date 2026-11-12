@@ -1,183 +1,358 @@
+
 /* =====================================
-   DESKTOP SCROLL MORPH
+   SHARED UTILITIES
 ===================================== */
-
-const desktopSection = document.getElementById("desktopMorph");
-const desktopDevice = document.getElementById("desktopDevice");
-const morphSticky = document.querySelector(".morph-sticky");
-
-const desktopScreen = desktopDevice?.querySelector(".desktop-screen");
-
-const desktopDetails = desktopDevice?.querySelectorAll(
-  ".desktop-top, .monitor-neck, .monitor-foot",
-);
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
 
 function smooth(value) {
-  return value * value * value * (value * (value * 6 - 15) + 10);
+  return value * value * value *
+    (value * (value * 6 - 15) + 10);
 }
+
+
+/* =====================================
+   DESKTOP SCROLL MORPH
+===================================== */
+
+const desktopSection = document.getElementById("desktopMorph");
+
+const desktopSticky = desktopSection?.querySelector(".morph-sticky");
+
+const desktopDevice = document.getElementById("desktopDevice");
+
+const desktopScreen = desktopDevice?.querySelector(".desktop-screen");
+
+const desktopDetails = desktopDevice?.querySelectorAll(
+  ".desktop-top, .monitor-neck, .monitor-foot"
+);
+
+const fullImage = desktopScreen?.querySelector(
+  ".desktop-full-image"
+);
+
+const cleanImage = desktopScreen?.querySelector(
+  ".desktop-clean-image"
+);
+
+const scrollHint = desktopSection?.querySelector(".scroll-hint");
+
 
 /* DESKTOP ENTRANCE */
 
-const desktopObserver = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        morphSticky.classList.add("is-visible");
-        desktopObserver.unobserve(entry.target);
-      }
-    });
-  },
-  {
-    threshold: 0.1,
-  },
-);
+if (desktopSection && desktopSticky && desktopDevice) {
 
-if (desktopSection && morphSticky) {
-  desktopObserver.observe(desktopSection);
+  if ("IntersectionObserver" in window) {
+
+    const desktopObserver = new IntersectionObserver(
+      (entries, observer) => {
+
+        entries.forEach((entry) => {
+
+          if (entry.isIntersecting) {
+
+            desktopSticky.classList.add("is-visible");
+
+            observer.unobserve(entry.target);
+
+          }
+
+        });
+
+      },
+      {
+        threshold: 0.05
+      }
+    );
+
+    desktopObserver.observe(desktopSection);
+
+  } else {
+
+    desktopSticky.classList.add("is-visible");
+
+  }
+
 }
 
-/* DESKTOP EXPANSION + RETURN */
+
+/* DESKTOP EXPANSION AND RETURN */
 
 function updateDesktop() {
-  if (!desktopSection || !desktopDevice || !desktopScreen) return;
+
+  if (!desktopSection || !desktopDevice || !desktopScreen) {
+    return;
+  }
 
   const rect = desktopSection.getBoundingClientRect();
-  const distance = desktopSection.offsetHeight - window.innerHeight;
 
-  const scrollProgress = clamp(-rect.top / Math.max(distance, 1), 0, 1);
+  const distance =
+    desktopSection.offsetHeight - window.innerHeight;
 
-  // First half: desktop -> fullscreen
-  // Second half: fullscreen -> desktop
+  const scrollProgress = clamp(
+    -rect.top / Math.max(distance, 1),
+    0,
+    1
+  );
 
   let progress;
 
+  // Desktop -> fullscreen
+
   if (scrollProgress <= 0.55) {
+
     progress = smooth(scrollProgress / 0.55);
-  } else {
-    progress = smooth((1 - scrollProgress) / 0.45);
+
   }
 
-  const startWidth = Math.min(window.innerWidth * 0.82, 1050);
+  // Fullscreen -> desktop
+
+  else {
+
+    progress = smooth((1 - scrollProgress) / 0.45);
+
+  }
+
+
+  const startWidth = Math.min(
+    window.innerWidth * 0.82,
+    1050
+  );
+
   const startHeight = (startWidth * 9) / 16;
 
-  const targetWidth = window.innerWidth;
 
-// On phones, keep the desktop monitor in 16:9 proportions.
-// On larger screens, preserve the existing fullscreen behavior.
-const targetHeight =
-  window.innerWidth <= 760
-    ? targetWidth * 9 / 16
-    : window.innerHeight;
+  const currentWidth =
+    startWidth +
+    (window.innerWidth - startWidth) * progress;
 
-const currentWidth =
-  startWidth + (targetWidth - startWidth) * progress;
+  const currentHeight =
+    startHeight +
+    (window.innerHeight - startHeight) * progress;
 
-const currentHeight =
-  startHeight + (targetHeight - startHeight) * progress;
+
+  /* DEVICE DIMENSIONS */
 
   desktopDevice.style.width = `${currentWidth}px`;
+
   desktopDevice.style.height = `${currentHeight}px`;
 
-  desktopDevice.style.borderRadius = `${16 * (1 - progress)}px`;
-  desktopDevice.style.borderWidth = `${9 * (1 - progress)}px`;
+  desktopDevice.style.borderRadius =
+    `${16 * (1 - progress)}px`;
 
-  desktopScreen.style.inset = `${25 * (1 - progress)}px ${8 * (1 - progress)}px ${8 * (1 - progress)}px`;
+  desktopDevice.style.borderWidth =
+    `${9 * (1 - progress)}px`;
 
-  desktopDetails.forEach((element) => {
+
+  /* SCREEN DIMENSIONS */
+
+  desktopScreen.style.inset =
+    `${25 * (1 - progress)}px ${8 * (1 - progress)}px ${8 * (1 - progress)}px`;
+
+
+  /* HIDE MONITOR DETAILS */
+
+  desktopDetails?.forEach((element) => {
+
     element.style.opacity = 1 - progress;
+
   });
 
-  const fullImage = desktopScreen.querySelector(".desktop-full-image");
-  const cleanImage = desktopScreen.querySelector(".desktop-clean-image");
 
-  fullImage.style.opacity = 1 - progress;
-  cleanImage.style.opacity = progress;
+  /* IMAGE TRANSITION */
 
-  const scrollHint = document.querySelector("#desktopMorph .scroll-hint");
+  if (fullImage) {
+    fullImage.style.opacity = 1 - progress;
+  }
+
+  if (cleanImage) {
+    cleanImage.style.opacity = progress;
+  }
+
+
+  /* SCROLL HINT */
+
   if (scrollHint) {
     scrollHint.style.opacity = 1 - progress;
   }
+
 }
 
+
+/* DESKTOP SCROLL LISTENERS */
+
 window.addEventListener("scroll", updateDesktop, {
-  passive: true,
+  passive: true
 });
 
 window.addEventListener("resize", updateDesktop);
 
 updateDesktop();
 
+
 /* =====================================
    PHONE ENTRANCE + ROTATION + MORPH
 ===================================== */
 
 const phoneSection = document.getElementById("phoneMorph");
+
 const phoneStage = phoneSection?.querySelector(".phone-stage");
+
 const phoneRotation = document.getElementById("phoneRotation");
+
 const phoneDevice = document.getElementById("phoneDevice");
 
 const phoneScreen = phoneDevice?.querySelector(".phone-screen");
 
 const phoneDetails = phoneDevice?.querySelectorAll(
-  ".phone-camera, .phone-button",
+  ".phone-camera, .phone-button"
 );
 
+const phoneCaption = phoneSection?.querySelector(".morph-caption");
+
+const landscapeImage = phoneDevice?.querySelector(
+  ".phone-landscape"
+);
+
+const cleanLandscape = phoneDevice?.querySelector(
+  ".phone-landscape-clean"
+);
+
+
 let phoneHasStarted = false;
+
 let phoneHasRotated = false;
+
 let phoneMorphStartScroll = null;
 
-const phoneStartWidth = phoneRotation?.offsetWidth || 263;
-const phoneStartHeight = phoneRotation?.offsetHeight || 508;
+let phoneRotationTimer = null;
 
-const phoneDeviceStartWidth = phoneDevice?.offsetWidth || 245;
-const phoneDeviceStartHeight = phoneDevice?.offsetHeight || 490;
+
+/* INITIAL PHONE DIMENSIONS */
+
+const phoneStartWidth = phoneDevice?.offsetWidth || 245;
+
+const phoneStartHeight = phoneDevice?.offsetHeight || 490;
+
 
 /* =====================================
-   START ENTRANCE AND AUTOMATIC ROTATION
+   PHONE ENTRANCE
 ===================================== */
 
-if (phoneSection && phoneStage && phoneRotation && phoneDevice) {
-  const phoneObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && !phoneHasStarted) {
-          phoneHasStarted = true;
+function startPhoneAnimation() {
 
-          // Slide phone in from the right
-          phoneStage.classList.add("phone-entered");
+  if (
+    !phoneSection ||
+    !phoneStage ||
+    !phoneRotation ||
+    !phoneDevice ||
+    phoneHasStarted
+  ) {
+    return;
+  }
 
-          // Wait 2 seconds, then rotate
-          setTimeout(() => {
-            phoneRotation.classList.add("fall-landscape");
-          }, 2000);
-        }
-      });
-    },
-    {
-      threshold: 0,
-    },
-  );
+  phoneHasStarted = true;
 
-  phoneObserver.observe(phoneSection);
+  // Slide phone in from the right
 
-  /* Wait until the physical rotation finishes */
+  phoneStage.classList.add("phone-entered");
 
-  phoneRotation.addEventListener("animationend", (event) => {
-    if (event.animationName !== "phoneActuallyFalls") return;
-    phoneHasRotated = true;
-    phoneMorphStartScroll = window.scrollY;
-    updatePhoneMorph();
-  });
+
+  // Wait until entrance finishes, then rotate
+
+  phoneRotationTimer = setTimeout(() => {
+
+    if (window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches) {
+
+      phoneRotation.style.transform = "rotate(-90deg)";
+
+      phoneHasRotated = true;
+
+      phoneMorphStartScroll = window.scrollY;
+
+      updatePhoneMorph();
+
+    } else {
+
+      phoneRotation.classList.add("fall-landscape");
+
+    }
+
+  }, 1500);
+
+}
+
+
+/* OBSERVE PHONE SECTION */
+
+if (
+  phoneSection &&
+  phoneStage &&
+  phoneRotation &&
+  phoneDevice
+) {
+
+  if ("IntersectionObserver" in window) {
+
+    const phoneObserver = new IntersectionObserver(
+      (entries) => {
+
+        entries.forEach((entry) => {
+
+          if (entry.isIntersecting && !phoneHasStarted) {
+
+            startPhoneAnimation();
+
+          }
+
+        });
+
+      },
+      {
+        threshold: 0
+      }
+    );
+
+    phoneObserver.observe(phoneSection);
+
+  } else {
+
+    startPhoneAnimation();
+
+  }
+
 
   /* =====================================
-   LANDSCAPE EXPANSION + RETURN
-===================================== */
+     PHYSICAL PHONE ROTATION COMPLETE
+  ===================================== */
+
+  phoneRotation.addEventListener("animationend", (event) => {
+
+    if (event.animationName !== "phoneActuallyFalls") {
+      return;
+    }
+
+    phoneHasRotated = true;
+
+    // Start the scroll morph from the current position
+
+    phoneMorphStartScroll = window.scrollY;
+
+    updatePhoneMorph();
+
+  });
+
+
+  /* =====================================
+     PHONE LANDSCAPE EXPANSION + RETURN
+  ===================================== */
 
   function updatePhoneMorph() {
+
     if (
       !phoneSection ||
       !phoneRotation ||
@@ -185,109 +360,232 @@ if (phoneSection && phoneStage && phoneRotation && phoneDevice) {
       !phoneScreen ||
       !phoneHasRotated ||
       phoneMorphStartScroll === null
-    )
+    ) {
       return;
+    }
+
 
     const sectionEnd =
-      phoneSection.offsetTop + phoneSection.offsetHeight - window.innerHeight;
+      phoneSection.offsetTop +
+      phoneSection.offsetHeight -
+      window.innerHeight;
 
-    const remainingDistance = Math.max(sectionEnd - phoneMorphStartScroll, 1);
+
+    const remainingDistance = Math.max(
+      sectionEnd - phoneMorphStartScroll,
+      1
+    );
+
 
     const scrollProgress = clamp(
-      (window.scrollY - phoneMorphStartScroll) / remainingDistance,
+      (window.scrollY - phoneMorphStartScroll) /
+      remainingDistance,
       0,
-      1,
+      1
     );
+
 
     let progress;
 
-    // Expand: horizontal phone -> fullscreen
+
+    // Expand horizontal phone -> fullscreen
+
     if (scrollProgress <= 0.42) {
+
       progress = smooth(scrollProgress / 0.42);
+
     }
 
-    // Brief fullscreen hold
+    // Hold fullscreen briefly
+
     else if (scrollProgress <= 0.55) {
+
       progress = 1;
+
     }
 
-    // Return: fullscreen -> horizontal phone
+    // Return fullscreen -> horizontal phone
+
     else {
-      progress = smooth((1 - scrollProgress) / 0.45);
+
+      progress = smooth(
+        (1 - scrollProgress) / 0.45
+      );
+
     }
 
-    /* Target dimensions:
-     The wrapper is rotated -90deg,
-     so its unrotated dimensions are reversed.
-  */
+
+    /* =====================================
+       TARGET DIMENSIONS
+    ===================================== */
+
+    // The phone is rotated -90 degrees.
+    // Its dimensions must be reversed.
 
     const targetWidth = window.innerHeight;
+
     const targetHeight = window.innerWidth;
 
+
     const currentWidth =
-  phoneStartWidth + (targetWidth - phoneStartWidth) * progress;
+      phoneStartWidth +
+      (targetWidth - phoneStartWidth) * progress;
 
-const currentHeight =
-  phoneStartHeight + (targetHeight - phoneStartHeight) * progress;
+    const currentHeight =
+      phoneStartHeight +
+      (targetHeight - phoneStartHeight) * progress;
 
-const currentDeviceWidth =
-  phoneDeviceStartWidth +
-  (targetWidth - phoneDeviceStartWidth) * progress;
 
-const currentDeviceHeight =
-  phoneDeviceStartHeight +
-  (targetHeight - phoneDeviceStartHeight) * progress;
+    /* =====================================
+       ROTATION WRAPPER
+    ===================================== */
 
-    /* Resize the rotation wrapper */
+    phoneRotation.style.width =
+      `${currentWidth}px`;
 
-    phoneRotation.style.width = `${currentWidth}px`;
-    phoneRotation.style.height = `${currentHeight}px`;
+    phoneRotation.style.height =
+      `${currentHeight}px`;
 
-    /* Resize the physical phone */
+
+    /* =====================================
+       PHONE DEVICE
+    ===================================== */
 
     const currentBorder = 9 * (1 - progress);
 
-    phoneDevice.style.width = `${currentDeviceWidth}px`;
-phoneDevice.style.height = `${currentDeviceHeight}px`;
-    phoneDevice.style.borderWidth = `${currentBorder}px`;
+    phoneDevice.style.width =
+      `${currentWidth}px`;
 
-    phoneDevice.style.borderRadius = `${37 * (1 - progress)}px`;
+    phoneDevice.style.height =
+      `${currentHeight}px`;
 
-    /* Expand the screenshot to the edges */
+    phoneDevice.style.borderWidth =
+      `${currentBorder}px`;
 
-    phoneScreen.style.inset = `${7 * (1 - progress)}px`;
+    phoneDevice.style.borderRadius =
+      `${37 * (1 - progress)}px`;
 
-    phoneScreen.style.borderRadius = `${25 * (1 - progress)}px`;
 
-    /* Hide camera and side button */
+    /* =====================================
+       PHONE SCREEN
+    ===================================== */
 
-    phoneDetails.forEach((element) => {
+    phoneScreen.style.inset =
+      `${7 * (1 - progress)}px`;
+
+    phoneScreen.style.borderRadius =
+      `${25 * (1 - progress)}px`;
+
+
+    /* =====================================
+       HIDE PHONE DETAILS
+    ===================================== */
+
+    phoneDetails?.forEach((element) => {
+
       element.style.opacity = 1 - progress;
+
     });
 
-    const phoneCaption = phoneSection.querySelector(".morph-caption");
 
     if (phoneCaption) {
+
       phoneCaption.style.opacity = 1 - progress;
+
     }
 
-    const cleanLandscape = phoneDevice.querySelector(".phone-landscape-clean");
-    const landscapeImage = phoneDevice.querySelector(".phone-landscape");
+
+    /* =====================================
+       LANDSCAPE IMAGE TRANSITION
+    ===================================== */
 
     if (cleanLandscape && landscapeImage) {
-      cleanLandscape.style.opacity = progress > 0.85 ? 1 : 0;
 
-      landscapeImage.style.opacity = progress > 0.85 ? 0 : 1;
+      const cleanProgress = clamp(
+        (progress - 0.78) / 0.17,
+        0,
+        1
+      );
+
+      cleanLandscape.style.opacity = cleanProgress;
+
+      landscapeImage.style.opacity = 1 - cleanProgress;
+
     }
+
   }
 
+
   /* =====================================
-   SCROLL + RESIZE UPDATES
-===================================== */
+     PHONE SCROLL + RESIZE LISTENERS
+  ===================================== */
 
   window.addEventListener("scroll", updatePhoneMorph, {
-    passive: true,
+    passive: true
   });
 
   window.addEventListener("resize", updatePhoneMorph);
+
 }
+
+
+/* =====================================
+   CONTACT FORM
+===================================== */
+
+const contactForm = document.getElementById("contactForm");
+
+if (contactForm) {
+
+  contactForm.addEventListener("submit", (event) => {
+
+    event.preventDefault();
+
+    const formData = new FormData(contactForm);
+
+    const name = formData.get("name");
+
+    const email = formData.get("email");
+
+    const subject = formData.get("subject");
+
+    const message = formData.get("message");
+
+
+    const emailBody = `
+Name: ${name}
+
+Email: ${email}
+
+Message:
+
+${message}
+`;
+
+
+    const mailtoLink =
+      `mailto:wajeehattique@gmail.com` +
+      `?subject=${encodeURIComponent(subject)}` +
+      `&body=${encodeURIComponent(emailBody)}`;
+
+
+    window.location.href = mailtoLink;
+
+  });
+
+}
+
+
+/* =====================================
+   PAGE INITIALIZATION
+===================================== */
+
+window.addEventListener("load", () => {
+
+  updateDesktop();
+
+  if (phoneHasRotated) {
+    updatePhoneMorph();
+  }
+
+});
